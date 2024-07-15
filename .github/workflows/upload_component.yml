@@ -1,0 +1,30 @@
+name: Push components to Espressif Component Service
+
+on:
+  # For pull requests: perform upload with "--dry-run" argument,
+  # i.e. validate that the component passes all checks for being uploaded.
+  pull_request:
+
+  # For pushes to master: actually upload the components to the registry.
+  push:
+    branches:
+      - main
+
+jobs:
+  upload_components:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          submodules: 'recursive'
+      - run: |
+          echo "${{ ( github.ref_name != 'main' || github.repository_owner != 'mr9you' ) && 'Checking' || 'Uploading' }} components"
+      - name: Upload components to component service
+        uses: espressif/upload-components-ci-action@v1
+        with:
+          name: "rt-tftp"
+          namespace: "mr9you"
+          # API token will only be available in the main branch in the main repository.
+          # However, dry-run doesn't require a valid token.
+          api_token: ${{ secrets.IDF_COMPONENT_API_TOKEN }}
+          dry_run: ${{ github.ref_name != 'main' || github.repository_owner != 'mr9you' }}
