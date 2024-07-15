@@ -1,0 +1,7 @@
+version: "1.0.0"
+description: tftp server and client support
+url: https://github.com/mr9you/rt-tftp
+repository: https://github.com/mr9you/rt-tftp.git
+issues: https://github.com/mr9you/rt-tftp/issues
+dependencies:
+  idf: ">=5.0"
